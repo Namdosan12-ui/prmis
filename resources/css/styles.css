@@ -1,0 +1,164 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+    box-sizing: border-box; /* Add this to ensure padding and border are included in element's total width and height */
+}
+
+/* Body Styles */
+body {
+    background: rgba(246, 247, 251, 1);
+    margin: 0;
+    padding: 0;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 16rem;
+    background-color: #1D2736;
+    color: white;
+    height: 100vh;
+    position: fixed;
+}
+
+.sidebar-header {
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 1rem;
+    border-bottom: 1px solid #344054;
+}
+
+.sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li {
+    border-bottom: 1px solid #344054;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    text-decoration: none;
+    color: white;
+    transition: background 0.3s, color 0.3s;
+}
+
+.sidebar-nav a:hover {
+    background-color: #F5F6FA;
+    color: #1D2736;
+}
+
+.sidebar-nav a.active {
+    background-color: #344054;
+}
+
+.sidebar-nav a .icon {
+    margin-right: 1rem;
+    font-size: 1.25rem;
+}
+
+/* Topbar Styles */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1D2736;
+    color: white;
+    padding: 0 1rem;
+    height: 57px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+}
+
+.logo {
+    color: white;
+    font-size: 15px;
+    font-family: sans-serif;
+    font-weight: 600;
+    padding-left: 1rem;
+    letter-spacing: 10px;
+}
+
+/* Philippine Time Styles */
+.ph-time {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    color: white;
+    font-weight: 600;
+    gap: 10px;
+}
+
+.ph-time-element,
+.ampm {
+    font-size: 1rem;
+}
+
+.date-day {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    color: white;
+}
+
+#phDay,
+#phFullDate {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 16rem; /* Adjust based on sidebar width */
+    padding: 2rem;
+    background: rgba(246, 247, 251, 1);
+    min-height: 100vh;
+    padding-top: 4rem; /* To account for the fixed topbar */
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #F5F6FA;
+    border-bottom: 1px solid #E2E8F0;
+    margin-bottom: 1rem;
+}
+
+.content-header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.content-header .user-info {
+    display: flex;
+    align-items: center;
+}
+
+.content-header .user-info a {
+    color: #1D2736;
+    text-decoration: none;
+    margin-left: 1rem;
+}

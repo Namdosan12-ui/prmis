@@ -10,50 +10,72 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\PatientController;
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\LaboratoryResultController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\LaboratoryServiceController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\QueueController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AdminController;
 
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// Authentication Routes
 Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
-                ->name('register');
-
+    Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
     Route::post('register', [RegisteredUserController::class, 'store']);
-
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
-                ->name('login');
-
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
-
-    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
-                ->name('password.request');
-
-    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
-                ->name('password.email');
-
-    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
-                ->name('password.reset');
-
-    Route::post('reset-password', [NewPasswordController::class, 'store'])
-                ->name('password.store');
+    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
+    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
+    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+    Route::post('reset-password', [NewPasswordController::class, 'store'])->name('password.store');
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('verify-email', EmailVerificationPromptController::class)
-                ->name('verification.notice');
-
-    Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
-                ->middleware(['signed', 'throttle:6,1'])
-                ->name('verification.verify');
-
-    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-                ->middleware('throttle:6,1')
-                ->name('verification.send');
-
-    Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
-                ->name('password.confirm');
-
+    Route::get('verify-email', EmailVerificationPromptController::class)->name('verification.notice');
+    Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
+    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])->middleware('throttle:6,1')->name('verification.send');
+    Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])->name('password.confirm');
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
-
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
-
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-                ->name('logout');
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
+
+// Dashboard Route
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard')->middleware('auth');
+
+// User Management Routes (Admin only)
+Route::resource('users', AdminController::class)->middleware(['auth', 'role:admin']);
+
+// Patient Management Routes (Admin and Physician)
+Route::resource('patients', PatientController::class)->middleware(['auth', 'role:admin|physician|front desk']);
+
+// Appointment Routes (Admin, Physician, and Front Desk)
+Route::resource('appointments', AppointmentController::class)->middleware(['auth', 'role:admin|physician|front desk']);
+
+// Laboratory Results Routes (Admin, Radiologist, and Medical Technologist)
+Route::resource('laboratory_results', LaboratoryResultController::class)->middleware(['auth', 'role:admin|radiologist|medical technologist']);
+
+// Payment Routes (Admin and Pharmacy Staff)
+Route::resource('payments', PaymentController::class)->middleware(['auth', 'role:admin|pharmacy staff']);
+
+// Laboratory Services Routes (Admin only)
+Route::resource('laboratory_services', LaboratoryServiceController::class)->middleware(['auth', 'role:admin']);
+
+// Transaction Routes (Admin and Pharmacy Staff)
+Route::resource('transactions', TransactionController::class)->middleware(['auth', 'role:admin|pharmacy staff|front desk']);
+
+// Queue Routes (Admin and Front Desk)
+Route::resource('queues', QueueController::class)->middleware(['auth', 'role:admin|front desk']);
+
+// Profile Routes (Authenticated Users)
+Route::resource('profiles', ProfileController::class)->middleware('auth');
